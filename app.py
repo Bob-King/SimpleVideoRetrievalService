@@ -1,9 +1,11 @@
 import os
-from svr_service import SvrService
+from typing import List, Optional
 
-from fastapi import FastAPI
+from fastapi import FastAPI,  Query
 from fastapi.staticfiles import StaticFiles
-from common import QueryVideoRequest, PutVideoRequest, VideoInfo
+
+from common import PutVideoRequest, VideoInfo
+from svr_service import SvrService
 
 
 app = FastAPI()
@@ -14,9 +16,14 @@ app.mount("/files", StaticFiles(directory=os.environ.get("FILES_DIR", "pub")))
 
 
 @app.get("/api/v1/video")
-async def get_video(request: QueryVideoRequest) -> list[VideoInfo]:
-    return service.get_video(request.text,
-                             request.similarity_threshold, request.topk)
+async def get_video(
+    text: str = Query(..., description="Query Text"),
+    similarity_threshold: Optional[float] = Query(
+        0.5, description="Similarity Threshold"),
+    topk: Optional[int] = Query(3, description="Top K Results"),
+) -> List[VideoInfo]:
+    results = service.get_video(text, similarity_threshold, topk)
+    return results
 
 
 @app.post("/api/v1/video")

@@ -27,13 +27,13 @@ def import_videos_from_csv(
 
 def query_videos_by_text(
         text: str,
-        similarity_threshold: float = 0.6,
+        similarity_threshold: float = 0.5,
         topk: int = 3,
         url: str = "http://localhost:8000/api/v1/video") -> None:
     rsp = requests.get(
         url,
-        json={"text": text,
-              "similarity_threshold": similarity_threshold, "topk": topk}
+        params={"text": text,
+                "similarity_threshold": similarity_threshold, "topk": topk}
     )
     if rsp.status_code != HTTPStatus.OK:
         raise Exception(f"Failed to query videos: {rsp.text}")
