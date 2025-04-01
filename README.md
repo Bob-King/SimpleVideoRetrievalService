@@ -14,6 +14,9 @@ pip install -r requirements.txt
 # 运行服务
 
 ```bash
+export DASHSCOPE_API_KEY=sk-xxxxxxxxxxxxxxxxxxxxxxxxxxx
+mkdir -p pub
+mkdir -p data
 uvicorn app:app
 ```
 
